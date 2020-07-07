@@ -25,4 +25,11 @@ class TaskController extends Controller
             'tasks' => $tasks,
         ]);
     }
+
+    public function showCreateForm(int $id)
+    {
+        return view('tasks/create', [
+            'folder_id' => $id
+        ]);
+    }
 }
