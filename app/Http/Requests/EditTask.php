@@ -4,15 +4,9 @@ namespace App\Http\Requests;
 
 use App\Task;
 use Illuminate\Validation\Rule;
-// use Illuminate\Foundation\Http\FormRequest;
 
 class EditTask extends CreateTask
 {
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
     public function rules()
     {
         $rule = parent::rules();
@@ -44,7 +38,7 @@ class EditTask extends CreateTask
         $status_labels = implode('、', $status_labels);
 
         return $messages + [
-            'status.in' => ':attribute には' . $status_labels . 'のいずれかを指定してください。',
+            'status.in' => ':attribute には ' . $status_labels. ' のいずれかを指定してください。',
         ];
     }
 }
