@@ -6,6 +6,7 @@ use App\Folder;
 use App\Task;
 use Illuminate\Http\Request;
 use App\Http\Requests\CreateTask;
+use App\Http\Requests\EditTask;
 
 class TaskController extends Controller
 {
@@ -60,18 +61,18 @@ class TaskController extends Controller
 
     public function edit(int $id, int $task_id, EditTask $request)
     {
-        // 編集対象のデータ取得
+        // 1
         $task = Task::find($task_id);
 
-        // 入力値を詰めてsave
+        // 2
         $task->title = $request->title;
         $task->status = $request->status;
         $task->due_date = $request->due_date;
         $task->save();
 
-        // タスク一覧画面へリダイレクト
+        // 3
         return redirect()->route('tasks.index', [
-            'id' =>$task->folder_id,
+            'id' => $task->folder_id,
         ]);
     }
 }
