@@ -3,16 +3,25 @@
 namespace App\Http\Controllers;
 
 use App\Folder;
-use App\Task;
-use Illuminate\Http\Request;
 use App\Http\Requests\CreateTask;
 use App\Http\Requests\EditTask;
+use App\Task;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
+    /**
+     * タスク一覧
+     * @param Folder $folder
+     * @return \Illuminate\View\View
+     */
     public function index(Folder $folder)
     {
+        if (Auth::user()->id !== $folder->user_id) {
+            abort(403);
+        }
+        
         // ユーザーのフォルダを取得する
         $folders = Auth::user()->folders()->get();
 
@@ -26,6 +35,11 @@ class TaskController extends Controller
         ]);
     }
 
+    /**
+     * タスク作成フォーム
+     * @param Folder $folder
+     * @return \Illuminate\View\View
+     */
     public function showCreateForm(Folder $folder)
     {
         return view('tasks/create', [
@@ -33,6 +47,12 @@ class TaskController extends Controller
         ]);
     }
 
+    /**
+     * タスク作成
+     * @param Folder $folder
+     * @param CreateTask $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function create(Folder $folder, CreateTask $request)
     {
         $task = new Task();
@@ -46,13 +66,26 @@ class TaskController extends Controller
         ]);
     }
 
+    /**
+     * タスク編集フォーム
+     * @param Folder $folder
+     * @param Task $task
+     * @return \Illuminate\View\View
+     */
     public function showEditForm(Folder $folder, Task $task)
     {
         return view('tasks/edit', [
-            'task' =>$task,
+            'task' => $task,
         ]);
     }
 
+    /**
+     * タスク編集
+     * @param Folder $folder
+     * @param Task $task
+     * @param EditTask $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function edit(Folder $folder, Task $task, EditTask $request)
     {
         $task->title = $request->title;
