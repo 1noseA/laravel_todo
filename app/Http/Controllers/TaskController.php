@@ -11,13 +11,17 @@ use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
-    public function index(int $id)
+    public function index(Folder $folder)
     {
         // ユーザーのフォルダを取得する
         $folders = Auth::user()->folders()->get();
 
         // 選ばれたフォルダを取得する
         $current_folder = Folder::find($id);
+
+        if (is_null($current_folder)) {
+            about(404);
+        }
 
         // 選ばれたフォルダに紐づくタスクを取得する
         $tasks = $current_folder->tasks()->get();
